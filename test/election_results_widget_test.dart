@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:criptocracia_app/models/candidate.dart';
 import 'package:criptocracia_app/models/election_result.dart';
 import 'package:criptocracia_app/widgets/election_results_widget.dart';
@@ -12,6 +13,8 @@ void main() {
 
   Widget buildWidget(ElectionResult results) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: ElectionResultsWidget(results: results)),
     );
   }
@@ -26,6 +29,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.text('No votes recorded yet'), findsOneWidget);
     });
@@ -39,6 +43,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.text('Alice'), findsOneWidget);
       expect(find.text('Bob'), findsOneWidget);
@@ -56,6 +61,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.text('75.0%'), findsOneWidget);
       expect(find.text('25.0%'), findsOneWidget);
@@ -70,6 +76,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       // The trophy icon should be present for the leader.
       expect(find.byIcon(Icons.emoji_events), findsOneWidget);
@@ -84,6 +91,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.text('1 vote'), findsOneWidget);
     });
@@ -97,6 +105,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.byType(LinearProgressIndicator), findsNWidgets(2));
     });

@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:criptocracia_app/models/election.dart';
 import 'package:criptocracia_app/screens/elections_list_screen.dart';
 import 'package:criptocracia_app/services/election_service.dart';
@@ -45,7 +46,11 @@ void main() {
     Widget buildApp() {
       return ChangeNotifierProvider<ElectionService>.value(
         value: electionService,
-        child: const MaterialApp(home: ElectionsListScreen()),
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: ElectionsListScreen(),
+        ),
       );
     }
 

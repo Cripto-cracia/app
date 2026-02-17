@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../models/election_result.dart';
@@ -32,6 +33,7 @@ class ElectionResultsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final colors = barColors ?? _defaultColors;
 
     if (results.totalVotes == 0) {
@@ -47,7 +49,7 @@ class ElectionResultsWidget extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'No votes recorded yet',
+                l10n.noVotesRecordedYet,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -72,10 +74,10 @@ class ElectionResultsWidget extends StatelessWidget {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(width: 8),
-                Text('Results', style: theme.textTheme.titleSmall),
+                Text(l10n.results, style: theme.textTheme.titleSmall),
                 const Spacer(),
                 Text(
-                  '${results.totalVotes} vote${results.totalVotes == 1 ? '' : 's'}',
+                  l10n.nVotes(results.totalVotes),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),

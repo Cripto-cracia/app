@@ -1,0 +1,310 @@
+{
+  "@@locale": "en",
+  "appName": "Cripto-cracia",
+  "@appName": {
+    "description": "Application name"
+  },
+  "welcomeMessage": "Welcome to Cripto-cracia",
+  "@welcomeMessage": {
+    "description": "Home screen welcome message"
+  },
+  "elections": "Elections",
+  "@elections": {
+    "description": "Elections screen title"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings screen title"
+  },
+  "filterByStatus": "Filter by status",
+  "@filterByStatus": {
+    "description": "Tooltip for filter button"
+  },
+  "all": "All",
+  "@all": {
+    "description": "Filter option: all elections"
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Election status: active"
+  },
+  "upcoming": "Upcoming",
+  "@upcoming": {
+    "description": "Election status: upcoming"
+  },
+  "finished": "Finished",
+  "@finished": {
+    "description": "Election status: finished"
+  },
+  "canceled": "Canceled",
+  "@canceled": {
+    "description": "Election status: canceled"
+  },
+  "noElectionsFound": "No elections found",
+  "@noElectionsFound": {
+    "description": "Empty state title"
+  },
+  "tapRefreshOrCheckRelays": "Tap refresh or check your relay connections.",
+  "@tapRefreshOrCheckRelays": {
+    "description": "Empty state subtitle"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Refresh button label"
+  },
+  "electionDetailComingSoon": "Election detail for \"{name}\" coming soon.",
+  "@electionDetailComingSoon": {
+    "description": "Snackbar when tapping an election card",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "election": "Election",
+  "@election": {
+    "description": "Generic election title"
+  },
+  "electionNotFound": "Election not found.",
+  "@electionNotFound": {
+    "description": "Shown when election ID is invalid"
+  },
+  "time": "Time",
+  "@time": {
+    "description": "Time section header"
+  },
+  "endsIn": "Ends in",
+  "@endsIn": {
+    "description": "Countdown prefix for active elections"
+  },
+  "startsIn": "Starts in",
+  "@startsIn": {
+    "description": "Countdown prefix for upcoming elections"
+  },
+  "ended": "Ended",
+  "@ended": {
+    "description": "Label for ended elections"
+  },
+  "startLabel": "Start: {dateTime}",
+  "@startLabel": {
+    "description": "Start date/time label",
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "endLabel": "End: {dateTime}",
+  "@endLabel": {
+    "description": "End date/time label",
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
+  },
+  "candidatesCount": "Candidates ({count})",
+  "@candidatesCount": {
+    "description": "Candidates section header with count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nCandidates": "{count, plural, =1{1 candidate} other{{count} candidates}}",
+  "@nCandidates": {
+    "description": "Number of candidates in election card",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noCandidatesRegistered": "No candidates registered.",
+  "@noCandidatesRegistered": {
+    "description": "Shown when election has no candidates"
+  },
+  "electoralCommission": "Electoral Commission",
+  "@electoralCommission": {
+    "description": "EC section header"
+  },
+  "electoralCommissionPublicKey": "Electoral Commission Public Key",
+  "@electoralCommissionPublicKey": {
+    "description": "EC public key section title in settings"
+  },
+  "copyEcPubkey": "Copy EC pubkey",
+  "@copyEcPubkey": {
+    "description": "Tooltip for copy EC pubkey button"
+  },
+  "ecPubkeyCopied": "EC pubkey copied to clipboard",
+  "@ecPubkeyCopied": {
+    "description": "Snackbar after copying EC pubkey"
+  },
+  "vote": "Vote",
+  "@vote": {
+    "description": "Vote button label"
+  },
+  "votingNotStarted": "Voting has not started yet",
+  "@votingNotStarted": {
+    "description": "Disabled vote button reason"
+  },
+  "electionEnded": "This election has ended",
+  "@electionEnded": {
+    "description": "Disabled vote button reason"
+  },
+  "electionCanceled": "This election was canceled",
+  "@electionCanceled": {
+    "description": "Disabled vote button reason"
+  },
+  "selectCandidateToVote": "Select a candidate to vote",
+  "@selectCandidateToVote": {
+    "description": "Hint when no candidate selected"
+  },
+  "votingFlowComingSoon": "Voting flow coming soon.",
+  "@votingFlowComingSoon": {
+    "description": "Placeholder snackbar for vote action"
+  },
+  "relays": "Relays",
+  "@relays": {
+    "description": "Relays section title"
+  },
+  "noRelaysConfigured": "No relays configured.",
+  "@noRelaysConfigured": {
+    "description": "Shown when relay list is empty"
+  },
+  "addRelay": "Add Relay",
+  "@addRelay": {
+    "description": "Add relay dialog title"
+  },
+  "relayUrlHint": "wss://relay.example.com",
+  "@relayUrlHint": {
+    "description": "Hint text for relay URL input"
+  },
+  "relayUrl": "Relay URL",
+  "@relayUrl": {
+    "description": "Label for relay URL input"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button label"
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Add button label"
+  },
+  "invalidRelayUrl": "Invalid relay URL. Must start with wss:// or ws://",
+  "@invalidRelayUrl": {
+    "description": "Error message for invalid relay URL"
+  },
+  "relayAlreadyExists": "Relay already exists.",
+  "@relayAlreadyExists": {
+    "description": "Error message for duplicate relay"
+  },
+  "ecNpubHint": "npub1...",
+  "@ecNpubHint": {
+    "description": "Hint text for EC npub input"
+  },
+  "ecNpubLabel": "EC npub",
+  "@ecNpubLabel": {
+    "description": "Label for EC npub input"
+  },
+  "invalidNpubFormat": "Invalid npub format",
+  "@invalidNpubFormat": {
+    "description": "Error message for invalid npub"
+  },
+  "ecKeyCleared": "EC key cleared.",
+  "@ecKeyCleared": {
+    "description": "Snackbar after clearing EC key"
+  },
+  "ecKeySaved": "EC key saved.",
+  "@ecKeySaved": {
+    "description": "Snackbar after saving EC key"
+  },
+  "mnemonicBackup": "Mnemonic Backup",
+  "@mnemonicBackup": {
+    "description": "Mnemonic section title"
+  },
+  "noMnemonicStored": "No mnemonic stored.",
+  "@noMnemonicStored": {
+    "description": "Shown when no mnemonic exists"
+  },
+  "generateNewMnemonic": "Generate New Mnemonic",
+  "@generateNewMnemonic": {
+    "description": "Button to generate mnemonic"
+  },
+  "tapToReveal": "(tap to reveal)",
+  "@tapToReveal": {
+    "description": "Hint on hidden mnemonic"
+  },
+  "hide": "Hide",
+  "@hide": {
+    "description": "Hide button label"
+  },
+  "reveal": "Reveal",
+  "@reveal": {
+    "description": "Reveal button label"
+  },
+  "copy": "Copy",
+  "@copy": {
+    "description": "Copy button label"
+  },
+  "mnemonicCopied": "Mnemonic copied to clipboard.",
+  "@mnemonicCopied": {
+    "description": "Snackbar after copying mnemonic"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme section title"
+  },
+  "system": "System",
+  "@system": {
+    "description": "System theme option"
+  },
+  "light": "Light",
+  "@light": {
+    "description": "Light theme option"
+  },
+  "dark": "Dark",
+  "@dark": {
+    "description": "Dark theme option"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language section title"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language name"
+  },
+  "spanish": "Español",
+  "@spanish": {
+    "description": "Spanish language name"
+  },
+  "candidateId": "ID: {id}",
+  "@candidateId": {
+    "description": "Candidate ID label",
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "noVotesRecordedYet": "No votes recorded yet",
+  "@noVotesRecordedYet": {
+    "description": "Shown when election has no votes"
+  },
+  "results": "Results",
+  "@results": {
+    "description": "Results section title"
+  },
+  "nVotes": "{count, plural, =1{1 vote} other{{count} votes}}",
+  "@nVotes": {
+    "description": "Vote count with pluralization",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

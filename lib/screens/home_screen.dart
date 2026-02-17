@@ -1,6 +1,5 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-
-import '../config/constants.dart';
 
 /// Placeholder home screen displayed on app launch.
 class HomeScreen extends StatelessWidget {
@@ -8,9 +7,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text(AppConstants.appName)),
-      body: const Center(child: Text('Welcome to ${AppConstants.appName}')),
+      appBar: AppBar(title: Text(l10n.appName)),
+      body: Center(child: Text(l10n.welcomeMessage)),
     );
   }
 }

@@ -53,6 +53,9 @@ dependencies:
   # Hardware-backed secure storage (Android Keystore / iOS Keychain)
   flutter_secure_storage: ^10.0.0
 
+  # Internationalization
+  intl: any
+
   # Device info
   device_info_plus: ^10.1.2
 
@@ -65,4 +68,5 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter:
+  generate: true
   uses-material-design: true

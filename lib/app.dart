@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'config/theme.dart';
@@ -17,11 +18,17 @@ class CriptocraciaApp extends StatelessWidget {
         final themeMode = settingsService.loaded
             ? settingsService.settings.themeMode
             : ThemeMode.system;
+        final locale = settingsService.loaded
+            ? settingsService.settings.locale
+            : null;
         return MaterialApp(
           title: 'Cripto-cracia',
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: themeMode,
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: const ElectionsListScreen(),
           routes: {'/settings': (_) => const SettingsScreen()},
         );

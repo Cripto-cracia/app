@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import 'package:criptocracia_app/l10n/app_localizations.dart';
+
 import '../config/constants.dart';
 import '../models/settings.dart';
 import 'secure_storage.dart';
@@ -15,6 +17,7 @@ class SettingsService extends ChangeNotifier {
   static const String _relayUrlsKey = 'settings_relay_urls';
   static const String _ecPubKeyKey = 'settings_ec_pub_key';
   static const String _themeModeKey = 'settings_theme_mode';
+  static const String _localeKey = 'settings_locale';
 
   AppSettings _settings = const AppSettings();
 
@@ -35,6 +38,7 @@ class SettingsService extends ChangeNotifier {
     final relayJson = await SecureStorage.read(key: _relayUrlsKey);
     final ecPubKey = await SecureStorage.read(key: _ecPubKeyKey);
     final themeModeStr = await SecureStorage.read(key: _themeModeKey);
+    final localeStr = await SecureStorage.read(key: _localeKey);
 
     List<String> relayUrls;
     if (relayJson != null) {
@@ -51,10 +55,17 @@ class SettingsService extends ChangeNotifier {
 
     final themeMode = _themeModeFromString(themeModeStr);
 
+    final locale =
+        localeStr != null &&
+            supportedLocales.any((l) => l.languageCode == localeStr)
+        ? Locale(localeStr)
+        : null;
+
     _settings = AppSettings(
       relayUrls: relayUrls,
       ecPubKey: ecPubKey,
       themeMode: themeMode,
+      locale: locale,
     );
     _loaded = true;
     notifyListeners();
@@ -128,6 +139,26 @@ class SettingsService extends ChangeNotifier {
       key: _themeModeKey,
       value: _themeModeToString(mode),
     );
+    notifyListeners();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Locale
+  // ---------------------------------------------------------------------------
+
+  /// Supported locales for the application.
+  /// Delegates to [AppLocalizations.supportedLocales] as single source of truth.
+  static List<Locale> get supportedLocales => AppLocalizations.supportedLocales;
+
+  /// Sets the app locale. Pass `null` to follow the system locale.
+  Future<void> setLocale(Locale? locale) async {
+    if (locale == null) {
+      _settings = _settings.copyWith(clearLocale: true);
+      await SecureStorage.delete(key: _localeKey);
+    } else {
+      _settings = _settings.copyWith(locale: locale);
+      await SecureStorage.write(key: _localeKey, value: locale.languageCode);
+    }
     notifyListeners();
   }
 

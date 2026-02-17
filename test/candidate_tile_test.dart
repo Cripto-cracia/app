@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:criptocracia_app/models/candidate.dart';
 import 'package:criptocracia_app/widgets/candidate_tile.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ void main() {
 
     Widget buildTile({bool isSelected = false, VoidCallback? onTap}) {
       return MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: CandidateTile(
             candidate: candidate,

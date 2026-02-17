@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -7,14 +8,15 @@ import '../services/secure_storage.dart';
 import '../services/settings_service.dart';
 
 /// Settings screen for configuring relays, EC public key, mnemonic backup,
-/// and app theme.
+/// app theme, and language.
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(l10n.settings)),
       body: Consumer<SettingsService>(
         builder: (context, service, _) {
           if (!service.loaded) {
@@ -29,6 +31,8 @@ class SettingsScreen extends StatelessWidget {
               const _MnemonicSection(),
               const Divider(),
               _ThemeSection(service: service),
+              const Divider(),
+              _LanguageSection(service: service),
             ],
           );
         },
@@ -48,6 +52,7 @@ class _RelaySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final relays = service.settings.relayUrls;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +62,7 @@ class _RelaySection extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Relays', style: Theme.of(context).textTheme.titleMedium),
+              Text(l10n.relays, style: Theme.of(context).textTheme.titleMedium),
               IconButton(
                 icon: const Icon(Icons.add),
                 onPressed: () => _showAddRelayDialog(context),
@@ -66,9 +71,9 @@ class _RelaySection extends StatelessWidget {
           ),
         ),
         if (relays.isEmpty)
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text('No relays configured.'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(l10n.noRelaysConfigured),
           ),
         ...relays.map(
           (url) => ListTile(
@@ -85,16 +90,17 @@ class _RelaySection extends StatelessWidget {
   }
 
   Future<void> _showAddRelayDialog(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     final controller = TextEditingController();
     final result = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Add Relay'),
+        title: Text(l10n.addRelay),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(
-            hintText: 'wss://relay.example.com',
-            labelText: 'Relay URL',
+          decoration: InputDecoration(
+            hintText: l10n.relayUrlHint,
+            labelText: l10n.relayUrl,
           ),
           keyboardType: TextInputType.url,
           autofocus: true,
@@ -102,11 +108,11 @@ class _RelaySection extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, controller.text),
-            child: const Text('Add'),
+            child: Text(l10n.add),
           ),
         ],
       ),
@@ -114,13 +120,9 @@ class _RelaySection extends StatelessWidget {
     if (result != null && result.trim().isNotEmpty) {
       if (!SettingsService.isValidRelayUrl(result)) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Invalid relay URL. Must start with wss:// or ws://',
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.invalidRelayUrl)));
         }
         return;
       }
@@ -128,7 +130,7 @@ class _RelaySection extends StatelessWidget {
       if (!added && context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Relay already exists.')));
+        ).showSnackBar(SnackBar(content: Text(l10n.relayAlreadyExists)));
       }
     }
   }
@@ -176,21 +178,22 @@ class _EcPubKeySectionState extends State<_EcPubKeySection> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Electoral Commission Public Key',
+            l10n.electoralCommissionPublicKey,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
           TextField(
             controller: _controller,
             decoration: InputDecoration(
-              hintText: 'npub1...',
-              labelText: 'EC npub',
+              hintText: l10n.ecNpubHint,
+              labelText: l10n.ecNpubLabel,
               errorText: _errorText,
               suffixIcon: IconButton(
                 icon: const Icon(Icons.save),
@@ -204,6 +207,7 @@ class _EcPubKeySectionState extends State<_EcPubKeySection> {
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context);
     final value = _controller.text.trim();
     if (value.isEmpty) {
       await widget.service.setEcPubKey(null);
@@ -211,12 +215,12 @@ class _EcPubKeySectionState extends State<_EcPubKeySection> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('EC key cleared.')));
+        ).showSnackBar(SnackBar(content: Text(l10n.ecKeyCleared)));
       }
       return;
     }
     if (!SettingsService.isValidNpub(value)) {
-      setState(() => _errorText = 'Invalid npub format');
+      setState(() => _errorText = l10n.invalidNpubFormat);
       return;
     }
     await widget.service.setEcPubKey(value);
@@ -224,7 +228,7 @@ class _EcPubKeySectionState extends State<_EcPubKeySection> {
     if (mounted) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('EC key saved.')));
+      ).showSnackBar(SnackBar(content: Text(l10n.ecKeySaved)));
     }
   }
 }
@@ -263,13 +267,14 @@ class _MnemonicSectionState extends State<_MnemonicSection> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Mnemonic Backup',
+            l10n.mnemonicBackup,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -279,11 +284,11 @@ class _MnemonicSectionState extends State<_MnemonicSection> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('No mnemonic stored.'),
+                Text(l10n.noMnemonicStored),
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: _generateMnemonic,
-                  child: const Text('Generate New Mnemonic'),
+                  child: Text(l10n.generateNewMnemonic),
                 ),
               ],
             )
@@ -298,7 +303,7 @@ class _MnemonicSectionState extends State<_MnemonicSection> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  _revealed ? _mnemonic! : '•' * 24 + ' (tap to reveal)',
+                  _revealed ? _mnemonic! : '${'•' * 24} ${l10n.tapToReveal}',
                   style: TextStyle(
                     fontFamily: 'monospace',
                     fontSize: 14,
@@ -314,18 +319,16 @@ class _MnemonicSectionState extends State<_MnemonicSection> {
                   icon: Icon(
                     _revealed ? Icons.visibility_off : Icons.visibility,
                   ),
-                  label: Text(_revealed ? 'Hide' : 'Reveal'),
+                  label: Text(_revealed ? l10n.hide : l10n.reveal),
                   onPressed: () => setState(() => _revealed = !_revealed),
                 ),
                 TextButton.icon(
                   icon: const Icon(Icons.copy),
-                  label: const Text('Copy'),
+                  label: Text(l10n.copy),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: _mnemonic!));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Mnemonic copied to clipboard.'),
-                      ),
+                      SnackBar(content: Text(l10n.mnemonicCopied)),
                     );
                   },
                 ),
@@ -360,35 +363,84 @@ class _ThemeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final themeMode = service.settings.themeMode;
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Theme', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.theme, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           SegmentedButton<ThemeMode>(
-            segments: const [
+            segments: [
               ButtonSegment(
                 value: ThemeMode.system,
-                label: Text('System'),
-                icon: Icon(Icons.settings_brightness),
+                label: Text(l10n.system),
+                icon: const Icon(Icons.settings_brightness),
               ),
               ButtonSegment(
                 value: ThemeMode.light,
-                label: Text('Light'),
-                icon: Icon(Icons.light_mode),
+                label: Text(l10n.light),
+                icon: const Icon(Icons.light_mode),
               ),
               ButtonSegment(
                 value: ThemeMode.dark,
-                label: Text('Dark'),
-                icon: Icon(Icons.dark_mode),
+                label: Text(l10n.dark),
+                icon: const Icon(Icons.dark_mode),
               ),
             ],
             selected: {themeMode},
             onSelectionChanged: (selected) {
               service.setThemeMode(selected.first);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Language section
+// ---------------------------------------------------------------------------
+
+class _LanguageSection extends StatelessWidget {
+  const _LanguageSection({required this.service});
+
+  final SettingsService service;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final currentLocale = service.settings.locale;
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.language, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          SegmentedButton<Locale?>(
+            segments: [
+              ButtonSegment<Locale?>(
+                value: null,
+                label: Text(l10n.system),
+                icon: const Icon(Icons.language),
+              ),
+              const ButtonSegment<Locale?>(
+                value: Locale('en'),
+                label: Text('English'),
+              ),
+              const ButtonSegment<Locale?>(
+                value: Locale('es'),
+                label: Text('Español'),
+              ),
+            ],
+            selected: {currentLocale},
+            onSelectionChanged: (selected) {
+              service.setLocale(selected.first);
             },
           ),
         ],

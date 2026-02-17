@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,14 @@ class _FakeElectionService extends ChangeNotifier implements ElectionService {
 void main() {
   group('HomeScreen', () {
     testWidgets('displays welcome message', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: HomeScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
 
       expect(find.text('Welcome to ${AppConstants.appName}'), findsOneWidget);
       expect(find.text(AppConstants.appName), findsOneWidget);
