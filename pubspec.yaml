@@ -22,7 +22,7 @@ dependencies:
   blind_rsa_signatures:
     git:
       url: https://github.com/grunch/blind_rsa_signatures_dart.git
-      ref: main
+      ref: 9c2eb6b1420b73f248e175c03ef84b97af2b87e9
 
   # Nostr protocol
   dart_nostr: ^9.1.1
@@ -31,7 +31,7 @@ dependencies:
   nip59:
     git:
       url: https://github.com/grunch/nip59-dart.git
-      ref: main
+      ref: 20b1cd969423ac7e9b81f977a8f84fd1546eacd6
 
   # State management
   provider: ^6.1.2
@@ -45,10 +45,12 @@ dependencies:
   # BIP32/BIP44 HD key derivation
   blockchain_utils: ^3.0.0
 
-  # Secure storage
+  # Local storage
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   shared_preferences: ^2.3.3
+
+  # Device info
   device_info_plus: ^10.1.2
 
   # App info

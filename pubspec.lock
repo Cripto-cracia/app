@@ -61,7 +61,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: main
+      ref: "9c2eb6b1420b73f248e175c03ef84b97af2b87e9"
       resolved-ref: "9c2eb6b1420b73f248e175c03ef84b97af2b87e9"
       url: "https://github.com/grunch/blind_rsa_signatures_dart.git"
     source: git
@@ -379,7 +379,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: main
+      ref: "20b1cd969423ac7e9b81f977a8f84fd1546eacd6"
       resolved-ref: "20b1cd969423ac7e9b81f977a8f84fd1546eacd6"
       url: "https://github.com/grunch/nip59-dart.git"
     source: git

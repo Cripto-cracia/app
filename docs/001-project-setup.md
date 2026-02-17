@@ -35,7 +35,7 @@ Initial project setup for Cripto-cracia, an anonymous voting application built o
 
 ## Project Structure
 
-```
+```text
 lib/
   main.dart          - Entry point with Provider setup
   app.dart           - Root MaterialApp widget
