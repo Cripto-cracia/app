@@ -12,7 +12,7 @@ ensures that:
 
 ## Protocol Flow
 
-```
+```text
 Voter                                    EC (Electoral Commission)
   │                                        │
   │  1. Generate nonce (32 bytes)          │
@@ -103,7 +103,7 @@ One token per election, keyed by election ID.
 
 The stored token is used to cast an anonymous vote:
 
-```
+```text
 payload = base64(h) : base64(sig) : base64(rand) : candidate_id
 ```
 

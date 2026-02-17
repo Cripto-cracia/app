@@ -83,6 +83,13 @@ class BlindSignatureService extends ChangeNotifier {
     required Election election,
     required String senderPrivateKey,
   }) async {
+    if (rsaKeyResolver == null) {
+      throw StateError(
+        'rsaKeyResolver must be set before calling requestBlindToken. '
+        'Wire it to the ElectionService that caches election data.',
+      );
+    }
+
     _setState(BlindSignatureState.requesting);
     _errorMessage = null;
 
@@ -266,42 +273,54 @@ class BlindSignatureService extends ChangeNotifier {
       final completer = _completers.remove(requestId);
       if (token == null || completer == null) return;
 
-      final payloadB64 = data['payload'] as String;
-      final blindSig = base64Decode(payloadB64);
+      // Inner try/catch: the completer has already been removed from the map,
+      // so any error during processing must be forwarded to the caller.
+      try {
+        final payloadB64 = data['payload'] as String;
+        final blindSig = base64Decode(payloadB64);
 
-      // Resolve the RSA public key to unblind.
-      final rsaPubKey = await _resolveRsaPubKey(token.electionId);
-      if (rsaPubKey == null) {
-        token.status = BlindTokenStatus.error;
-        token.errorMessage = 'Could not resolve RSA public key';
-        await TokenStorageService.saveToken(token);
-        completer.completeError(
-          StateError('Could not resolve RSA public key for unblinding'),
+        // Resolve the RSA public key to unblind.
+        final rsaPubKey = await _resolveRsaPubKey(token.electionId);
+        if (rsaPubKey == null) {
+          token.status = BlindTokenStatus.error;
+          token.errorMessage = 'Could not resolve RSA public key';
+          await TokenStorageService.saveToken(token);
+          completer.completeError(
+            StateError('Could not resolve RSA public key for unblinding'),
+          );
+          return;
+        }
+
+        // Unblind and verify.
+        final unblindedSig = unblindSignature(
+          blindSig: blindSig,
+          secret: token.secret,
+          messageRandomizer: token.messageRandomizer,
+          message: token.hashedNonce,
+          rsaPubKey: rsaPubKey,
         );
-        return;
+
+        token
+          ..blindSignature = blindSig
+          ..unblindedSignature = unblindedSig
+          ..status = BlindTokenStatus.received;
+
+        await TokenStorageService.saveToken(token);
+        completer.complete(token);
+
+        debugPrint(
+          'BlindSignatureService: Token received and verified for election '
+          '${token.electionId}',
+        );
+      } catch (e) {
+        token.status = BlindTokenStatus.error;
+        token.errorMessage = e.toString();
+        await TokenStorageService.saveToken(token);
+        if (!completer.isCompleted) {
+          completer.completeError(e);
+        }
+        rethrow;
       }
-
-      // Unblind and verify.
-      final unblindedSig = unblindSignature(
-        blindSig: blindSig,
-        secret: token.secret,
-        messageRandomizer: token.messageRandomizer,
-        message: token.hashedNonce,
-        rsaPubKey: rsaPubKey,
-      );
-
-      token
-        ..blindSignature = blindSig
-        ..unblindedSignature = unblindedSig
-        ..status = BlindTokenStatus.received;
-
-      await TokenStorageService.saveToken(token);
-      completer.complete(token);
-
-      debugPrint(
-        'BlindSignatureService: Token received and verified for election '
-        '${token.electionId}',
-      );
     } catch (e) {
       debugPrint('BlindSignatureService: Error handling response: $e');
     }
