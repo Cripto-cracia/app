@@ -30,11 +30,11 @@ void main() {
   Widget buildApp() {
     return ChangeNotifierProvider<SettingsService>.value(
       value: settingsService,
-      child: MaterialApp(
+      child: const MaterialApp(
         home: Material(
           child: MediaQuery(
-            data: const MediaQueryData(size: Size(400, 1200)),
-            child: const SettingsScreen(),
+            data: MediaQueryData(size: Size(400, 1200)),
+            child: SettingsScreen(),
           ),
         ),
       ),

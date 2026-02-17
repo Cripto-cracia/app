@@ -73,13 +73,10 @@ void main() {
 
     test('setEcPubKey saves valid npub', () async {
       await service.load();
-      // Generate a valid-length npub (63 chars: "npub1" + 58 bech32 chars)
       const validNpub =
           'npub1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqspczk8';
-      // That may not have valid checksum but passes format check.
-      // Use a known-valid one instead:
-      // 32 zero bytes in bech32 = npub1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsggq3y5
-      // Let's just test with the validation helper directly.
+      await service.setEcPubKey(validNpub);
+      expect(service.settings.ecPubKey, equals(validNpub));
     });
 
     test('setEcPubKey rejects invalid npub', () async {

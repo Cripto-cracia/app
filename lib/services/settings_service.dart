@@ -38,7 +38,13 @@ class SettingsService extends ChangeNotifier {
 
     List<String> relayUrls;
     if (relayJson != null) {
-      relayUrls = List<String>.from(jsonDecode(relayJson) as List);
+      try {
+        relayUrls = List<String>.from(jsonDecode(relayJson) as List);
+      } catch (_) {
+        // Corrupted storage — fall back to defaults and clear bad data.
+        relayUrls = List<String>.from(AppConstants.defaultRelays);
+        await SecureStorage.delete(key: _relayUrlsKey);
+      }
     } else {
       relayUrls = List<String>.from(AppConstants.defaultRelays);
     }
