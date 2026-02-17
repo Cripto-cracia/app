@@ -52,6 +52,10 @@ class _ElectionsListScreenState extends State<ElectionsListScreen> {
                 value: ElectionStatus.finished,
                 child: Text('Finished'),
               ),
+              const PopupMenuItem(
+                value: ElectionStatus.canceled,
+                child: Text('Canceled'),
+              ),
             ],
           ),
         ],
@@ -128,7 +132,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Pull to refresh or check your relay connections.',
+            'Tap refresh or check your relay connections.',
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),

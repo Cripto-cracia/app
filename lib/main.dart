@@ -8,14 +8,16 @@ import 'services/nostr_service.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final nostrService = NostrService();
-  final electionService = ElectionService(nostrService: nostrService);
-
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<NostrService>.value(value: nostrService),
-        ChangeNotifierProvider<ElectionService>.value(value: electionService),
+        ChangeNotifierProvider<NostrService>(create: (_) => NostrService()),
+        ChangeNotifierProxyProvider<NostrService, ElectionService>(
+          create: (context) =>
+              ElectionService(nostrService: context.read<NostrService>()),
+          update: (_, nostrService, previous) =>
+              previous ?? ElectionService(nostrService: nostrService),
+        ),
       ],
       child: const CriptocraciaApp(),
     ),

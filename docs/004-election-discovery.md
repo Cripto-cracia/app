@@ -83,6 +83,7 @@ in `main.dart`. The elections list screen is set as the app home.
 | `test/election_model_test.dart` | Model tests |
 | `test/election_service_test.dart` | Service tests |
 | `test/elections_list_screen_test.dart` | Widget tests |
+| `test/home_screen_test.dart` | Updated for new home screen |
 
 ## Next Steps
 

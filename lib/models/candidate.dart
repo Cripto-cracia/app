@@ -9,8 +9,20 @@ class Candidate {
   const Candidate({required this.id, required this.name});
 
   /// Creates a [Candidate] from a JSON map.
+  ///
+  /// Handles both integer and string ID values from external EC servers.
   factory Candidate.fromMap(Map<String, dynamic> map) {
-    return Candidate(id: map['id'] as int, name: map['name'] as String);
+    final rawId = map['id'];
+    final int id;
+    if (rawId is int) {
+      id = rawId;
+    } else if (rawId is String) {
+      id = int.parse(rawId);
+    } else {
+      throw FormatException('Candidate id is missing or invalid: $rawId');
+    }
+    final name = map['name'] as String? ?? '';
+    return Candidate(id: id, name: name);
   }
 
   /// Serializes to a JSON map.
