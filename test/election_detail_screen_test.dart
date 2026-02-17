@@ -29,6 +29,7 @@ void main() {
 
     testWidgets('shows not found for unknown election', (tester) async {
       await tester.pumpWidget(buildApp('unknown'));
+      await tester.pump();
       expect(find.text('Election not found.'), findsOneWidget);
     });
 

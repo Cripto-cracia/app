@@ -429,13 +429,13 @@ class _LanguageSection extends StatelessWidget {
                 label: Text(l10n.system),
                 icon: const Icon(Icons.language),
               ),
-              ButtonSegment<Locale?>(
-                value: const Locale('en'),
-                label: Text(l10n.english),
+              const ButtonSegment<Locale?>(
+                value: Locale('en'),
+                label: Text('English'),
               ),
-              ButtonSegment<Locale?>(
-                value: const Locale('es'),
-                label: Text(l10n.spanish),
+              const ButtonSegment<Locale?>(
+                value: Locale('es'),
+                label: Text('Español'),
               ),
             ],
             selected: {currentLocale},

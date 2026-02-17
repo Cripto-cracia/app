@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import 'package:criptocracia_app/l10n/app_localizations.dart';
+
 import '../config/constants.dart';
 import '../models/settings.dart';
 import 'secure_storage.dart';
@@ -53,7 +55,11 @@ class SettingsService extends ChangeNotifier {
 
     final themeMode = _themeModeFromString(themeModeStr);
 
-    final locale = localeStr != null ? Locale(localeStr) : null;
+    final locale =
+        localeStr != null &&
+            supportedLocales.any((l) => l.languageCode == localeStr)
+        ? Locale(localeStr)
+        : null;
 
     _settings = AppSettings(
       relayUrls: relayUrls,
@@ -141,7 +147,8 @@ class SettingsService extends ChangeNotifier {
   // ---------------------------------------------------------------------------
 
   /// Supported locales for the application.
-  static const List<Locale> supportedLocales = [Locale('en'), Locale('es')];
+  /// Delegates to [AppLocalizations.supportedLocales] as single source of truth.
+  static List<Locale> get supportedLocales => AppLocalizations.supportedLocales;
 
   /// Sets the app locale. Pass `null` to follow the system locale.
   Future<void> setLocale(Locale? locale) async {

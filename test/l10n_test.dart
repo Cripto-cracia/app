@@ -25,8 +25,10 @@ void main() {
       expect(l10n.vote, 'Vote');
       expect(l10n.refresh, 'Refresh');
       expect(l10n.language, 'Language');
+      expect(l10n.nVotes(0), '0 votes');
       expect(l10n.nVotes(1), '1 vote');
       expect(l10n.nVotes(5), '5 votes');
+      expect(l10n.nCandidates(0), '0 candidates');
       expect(l10n.nCandidates(1), '1 candidate');
       expect(l10n.nCandidates(3), '3 candidates');
       expect(l10n.candidatesCount(2), 'Candidates (2)');
@@ -54,8 +56,10 @@ void main() {
       expect(l10n.vote, 'Votar');
       expect(l10n.refresh, 'Actualizar');
       expect(l10n.language, 'Idioma');
+      expect(l10n.nVotes(0), '0 votos');
       expect(l10n.nVotes(1), '1 voto');
       expect(l10n.nVotes(5), '5 votos');
+      expect(l10n.nCandidates(0), '0 candidatos');
       expect(l10n.nCandidates(1), '1 candidato');
       expect(l10n.nCandidates(3), '3 candidatos');
       expect(l10n.candidatesCount(2), 'Candidatos (2)');

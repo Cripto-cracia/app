@@ -39,6 +39,7 @@ void main() {
           home: HomeScreen(),
         ),
       );
+      await tester.pumpAndSettle();
 
       expect(find.text('Welcome to ${AppConstants.appName}'), findsOneWidget);
       expect(find.text(AppConstants.appName), findsOneWidget);

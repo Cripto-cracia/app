@@ -29,6 +29,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.text('No votes recorded yet'), findsOneWidget);
     });
@@ -42,6 +43,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.text('Alice'), findsOneWidget);
       expect(find.text('Bob'), findsOneWidget);
@@ -59,6 +61,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.text('75.0%'), findsOneWidget);
       expect(find.text('25.0%'), findsOneWidget);
@@ -73,6 +76,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       // The trophy icon should be present for the leader.
       expect(find.byIcon(Icons.emoji_events), findsOneWidget);
@@ -87,6 +91,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.text('1 vote'), findsOneWidget);
     });
@@ -100,6 +105,7 @@ void main() {
       );
 
       await tester.pumpWidget(buildWidget(results));
+      await tester.pumpAndSettle();
 
       expect(find.byType(LinearProgressIndicator), findsNWidgets(2));
     });

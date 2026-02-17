@@ -36,6 +36,8 @@ void main() {
 
     test('colorFor returns correct values', () {
       expect(StatusBadge.colorFor(ElectionStatus.active), Colors.green);
+      expect(StatusBadge.colorFor(ElectionStatus.upcoming), Colors.orange);
+      expect(StatusBadge.colorFor(ElectionStatus.finished), Colors.grey);
       expect(StatusBadge.colorFor(ElectionStatus.canceled), Colors.red);
     });
   });
