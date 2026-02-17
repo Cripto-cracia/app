@@ -19,12 +19,16 @@ class TokenStorageService {
     await SecureStorage.write(
       key: _key(token.electionId),
       value: token.toJson(),
+      namespace: StorageNamespace.keys,
     );
   }
 
   /// Loads the [BlindToken] for [electionId], or `null` if none exists.
   static Future<BlindToken?> getToken(String electionId) async {
-    final json = await SecureStorage.read(key: _key(electionId));
+    final json = await SecureStorage.read(
+      key: _key(electionId),
+      namespace: StorageNamespace.keys,
+    );
     if (json == null) return null;
     try {
       return BlindToken.fromJson(json);
@@ -35,12 +39,18 @@ class TokenStorageService {
 
   /// Returns `true` if a token exists for [electionId].
   static Future<bool> hasToken(String electionId) async {
-    return SecureStorage.exists(key: _key(electionId));
+    return SecureStorage.exists(
+      key: _key(electionId),
+      namespace: StorageNamespace.keys,
+    );
   }
 
   /// Deletes the token for [electionId].
   static Future<void> deleteToken(String electionId) async {
-    await SecureStorage.delete(key: _key(electionId));
+    await SecureStorage.delete(
+      key: _key(electionId),
+      namespace: StorageNamespace.keys,
+    );
   }
 
   /// Returns all stored blind tokens.
