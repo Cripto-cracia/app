@@ -46,3 +46,4 @@ List tile for a single candidate showing name, ID, and a radio button for select
 
 - Voting flow implementation (Issue #6) will connect to the Vote button
 - "Has voted" state tracking to disable re-voting
+
