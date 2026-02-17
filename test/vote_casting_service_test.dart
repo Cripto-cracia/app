@@ -289,12 +289,17 @@ void main() {
         var notifyCount = 0;
         voteCastingService.addListener(() => notifyCount++);
 
-        // Trigger a real state transition (idle → error)
-        await voteCastingService.castVote(
-          token: token,
-          candidateId: 1,
-          election: election,
-        );
+        // Trigger a real state transition (idle → casting → error)
+        // castVote rethrows after transitioning to error, so we catch it.
+        try {
+          await voteCastingService.castVote(
+            token: token,
+            candidateId: 1,
+            election: election,
+          );
+        } on StateError catch (_) {
+          // expected — token is not ready
+        }
         expect(notifyCount, greaterThan(0));
         expect(voteCastingService.state, equals(VoteCastingState.error));
 

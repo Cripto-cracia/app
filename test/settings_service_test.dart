@@ -76,7 +76,7 @@ void main() {
     test('setEcPubKey saves valid npub', () async {
       await service.load();
       const validNpub =
-          'npub1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqspczk8';
+          'npub1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsclq0s';
       await service.setEcPubKey(validNpub);
       expect(service.settings.ecPubKey, equals(validNpub));
     });
