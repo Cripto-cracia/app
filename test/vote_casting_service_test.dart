@@ -91,6 +91,7 @@ void main() {
     });
 
     tearDown(() {
+      voteCastingService.dispose();
       giftWrapService.dispose();
       nostrService.dispose();
     });
@@ -269,14 +270,37 @@ void main() {
     });
 
     group('state transitions', () {
-      test('notifies listeners on state change', () {
-        var notified = false;
-        voteCastingService.addListener(() => notified = true);
-        voteCastingService.reset();
+      test('notifies listeners on state change', () async {
+        final election = _createElection(rsaPubKey);
+        final token = BlindToken(
+          electionId: 'election-1',
+          nonce: Uint8List(32),
+          hashedNonce: Uint8List(32),
+          blindedMessage: Uint8List(32),
+          secret: Uint8List(32),
+          messageRandomizer: null,
+          requestId: 'req-1',
+          status: BlindTokenStatus.pending, // invalid — will cause error
+        );
 
-        // reset to idle from idle — no change, no notification.
-        // Force a state change by triggering an error first.
-        expect(notified, isFalse);
+        voteCastingService.anonymousKeyGenerator = () =>
+            (privateKey: 'a' * 64, publicKey: 'b' * 64);
+
+        var notifyCount = 0;
+        voteCastingService.addListener(() => notifyCount++);
+
+        // Trigger a real state transition (idle → error)
+        await voteCastingService.castVote(
+          token: token,
+          candidateId: 1,
+          election: election,
+        );
+        expect(notifyCount, greaterThan(0));
+        expect(voteCastingService.state, equals(VoteCastingState.error));
+
+        // Reset back to idle — should notify again
+        voteCastingService.reset();
+        expect(voteCastingService.state, equals(VoteCastingState.idle));
       });
 
       test('castVote transitions to error on invalid token', () async {

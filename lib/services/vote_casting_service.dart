@@ -157,6 +157,13 @@ class VoteCastingService extends ChangeNotifier {
     required int candidateId,
     required String electionId,
   }) {
+    if (token.unblindedSignature == null) {
+      throw ArgumentError(
+        'Token must have an unblinded signature. '
+        'Ensure the token is in "ready" status before calling buildVotePayload.',
+      );
+    }
+
     return {
       'kind': 2, // Vote submission
       'election_id': electionId,
