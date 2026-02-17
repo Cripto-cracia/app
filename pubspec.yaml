@@ -50,6 +50,9 @@ dependencies:
   hive_flutter: ^1.1.0
   shared_preferences: ^2.3.3
 
+  # Hardware-backed secure storage (Android Keystore / iOS Keychain)
+  flutter_secure_storage: ^10.0.0
+
   # Device info
   device_info_plus: ^10.1.2
 
