@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../models/election.dart';
@@ -9,19 +10,31 @@ class StatusBadge extends StatelessWidget {
 
   const StatusBadge({super.key, required this.status});
 
-  /// Returns the label and color for the given [status].
-  static (String, Color) labelAndColor(ElectionStatus status) {
+  /// Returns the color for the given [status].
+  static Color colorFor(ElectionStatus status) {
     return switch (status) {
-      ElectionStatus.active => ('Active', Colors.green),
-      ElectionStatus.upcoming => ('Upcoming', Colors.orange),
-      ElectionStatus.finished => ('Finished', Colors.grey),
-      ElectionStatus.canceled => ('Canceled', Colors.red),
+      ElectionStatus.active => Colors.green,
+      ElectionStatus.upcoming => Colors.orange,
+      ElectionStatus.finished => Colors.grey,
+      ElectionStatus.canceled => Colors.red,
+    };
+  }
+
+  /// Returns the localized label for the given [status].
+  static String labelFor(AppLocalizations l10n, ElectionStatus status) {
+    return switch (status) {
+      ElectionStatus.active => l10n.active,
+      ElectionStatus.upcoming => l10n.upcoming,
+      ElectionStatus.finished => l10n.finished,
+      ElectionStatus.canceled => l10n.canceled,
     };
   }
 
   @override
   Widget build(BuildContext context) {
-    final (label, color) = labelAndColor(status);
+    final l10n = AppLocalizations.of(context);
+    final label = labelFor(l10n, status);
+    final color = colorFor(status);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),

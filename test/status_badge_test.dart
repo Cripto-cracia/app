@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:criptocracia_app/models/election.dart';
 import 'package:criptocracia_app/widgets/status_badge.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ void main() {
   group('StatusBadge', () {
     Widget buildBadge(ElectionStatus status) {
       return MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(body: StatusBadge(status: status)),
       );
     }
@@ -31,15 +34,9 @@ void main() {
       expect(find.text('Canceled'), findsOneWidget);
     });
 
-    test('labelAndColor returns correct values', () {
-      expect(StatusBadge.labelAndColor(ElectionStatus.active), (
-        'Active',
-        Colors.green,
-      ));
-      expect(StatusBadge.labelAndColor(ElectionStatus.canceled), (
-        'Canceled',
-        Colors.red,
-      ));
+    test('colorFor returns correct values', () {
+      expect(StatusBadge.colorFor(ElectionStatus.active), Colors.green);
+      expect(StatusBadge.colorFor(ElectionStatus.canceled), Colors.red);
     });
   });
 }

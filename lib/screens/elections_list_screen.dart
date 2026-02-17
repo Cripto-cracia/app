@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,36 +31,37 @@ class _ElectionsListScreenState extends State<ElectionsListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Elections'),
+        title: Text(l10n.elections),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            tooltip: 'Settings',
+            tooltip: l10n.settings,
             onPressed: () => Navigator.pushNamed(context, '/settings'),
           ),
           PopupMenuButton<ElectionStatus?>(
             icon: const Icon(Icons.filter_list),
-            tooltip: 'Filter by status',
+            tooltip: l10n.filterByStatus,
             onSelected: (status) => setState(() => _filterStatus = status),
             itemBuilder: (_) => [
-              const PopupMenuItem(value: null, child: Text('All')),
-              const PopupMenuItem(
+              PopupMenuItem(value: null, child: Text(l10n.all)),
+              PopupMenuItem(
                 value: ElectionStatus.active,
-                child: Text('Active'),
+                child: Text(l10n.active),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: ElectionStatus.upcoming,
-                child: Text('Upcoming'),
+                child: Text(l10n.upcoming),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: ElectionStatus.finished,
-                child: Text('Finished'),
+                child: Text(l10n.finished),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: ElectionStatus.canceled,
-                child: Text('Canceled'),
+                child: Text(l10n.canceled),
               ),
             ],
           ),
@@ -89,12 +91,10 @@ class _ElectionsListScreenState extends State<ElectionsListScreen> {
                 return ElectionCard(
                   election: election,
                   onTap: () {
-                    // Placeholder: navigate to election detail (Issue #5).
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          'Election detail for "${election.name}" '
-                          'coming soon.',
+                          l10n.electionDetailComingSoon(election.name),
                         ),
                       ),
                     );
@@ -118,6 +118,7 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Center(
       child: Column(
@@ -130,14 +131,14 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'No elections found',
+            l10n.noElectionsFound,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Tap refresh or check your relay connections.',
+            l10n.tapRefreshOrCheckRelays,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -146,7 +147,7 @@ class _EmptyState extends StatelessWidget {
           FilledButton.icon(
             onPressed: onRefresh,
             icon: const Icon(Icons.refresh),
-            label: const Text('Refresh'),
+            label: Text(l10n.refresh),
           ),
         ],
       ),

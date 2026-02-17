@@ -1,6 +1,8 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../models/election.dart';
+import 'status_badge.dart';
 
 /// A Material card displaying election summary information.
 class ElectionCard extends StatelessWidget {
@@ -15,6 +17,7 @@ class ElectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -66,7 +69,7 @@ class ElectionCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '${election.candidates.length} candidates',
+                    l10n.nCandidates(election.candidates.length),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -97,12 +100,9 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (label, color) = switch (status) {
-      ElectionStatus.active => ('Active', Colors.green),
-      ElectionStatus.upcoming => ('Upcoming', Colors.orange),
-      ElectionStatus.finished => ('Finished', Colors.grey),
-      ElectionStatus.canceled => ('Canceled', Colors.red),
-    };
+    final l10n = AppLocalizations.of(context);
+    final label = StatusBadge.labelFor(l10n, status);
+    final color = StatusBadge.colorFor(status);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),

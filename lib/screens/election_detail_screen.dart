@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Consumer<ElectionService>(
       builder: (context, service, _) {
@@ -36,8 +38,8 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
 
         if (election == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Election')),
-            body: const Center(child: Text('Election not found.')),
+            appBar: AppBar(title: Text(l10n.election)),
+            body: Center(child: Text(l10n.electionNotFound)),
           );
         }
 
@@ -48,13 +50,13 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
             children: [
               _buildHeader(theme, election),
               const SizedBox(height: 16),
-              _buildTimeSection(theme, election),
+              _buildTimeSection(theme, l10n, election),
               const Divider(height: 32),
-              _buildCandidatesSection(theme, election),
+              _buildCandidatesSection(theme, l10n, election),
               const Divider(height: 32),
-              _buildEcSection(theme, election),
+              _buildEcSection(theme, l10n, election),
               const SizedBox(height: 24),
-              _buildVoteButton(theme, election),
+              _buildVoteButton(theme, l10n, election),
             ],
           ),
         );
@@ -79,7 +81,11 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
     );
   }
 
-  Widget _buildTimeSection(ThemeData theme, Election election) {
+  Widget _buildTimeSection(
+    ThemeData theme,
+    AppLocalizations l10n,
+    Election election,
+  ) {
     final status = election.status;
 
     return Card(
@@ -96,14 +102,14 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(width: 8),
-                Text('Time', style: theme.textTheme.titleSmall),
+                Text(l10n.time, style: theme.textTheme.titleSmall),
               ],
             ),
             const SizedBox(height: 12),
             if (status == ElectionStatus.active)
               CountdownTimer(
                 targetTime: election.endTime,
-                prefix: 'Ends in',
+                prefix: l10n.endsIn,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.green,
@@ -112,7 +118,7 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
             else if (status == ElectionStatus.upcoming)
               CountdownTimer(
                 targetTime: election.startTime,
-                prefix: 'Starts in',
+                prefix: l10n.startsIn,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.orange,
@@ -120,7 +126,7 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
               )
             else
               Text(
-                'Ended',
+                l10n.ended,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.grey,
@@ -128,11 +134,11 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
               ),
             const SizedBox(height: 8),
             Text(
-              'Start: ${_formatDateTime(election.startTime)}',
+              l10n.startLabel(_formatDateTime(election.startTime)),
               style: theme.textTheme.bodySmall,
             ),
             Text(
-              'End: ${_formatDateTime(election.endTime)}',
+              l10n.endLabel(_formatDateTime(election.endTime)),
               style: theme.textTheme.bodySmall,
             ),
           ],
@@ -141,7 +147,11 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
     );
   }
 
-  Widget _buildCandidatesSection(ThemeData theme, Election election) {
+  Widget _buildCandidatesSection(
+    ThemeData theme,
+    AppLocalizations l10n,
+    Election election,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -154,7 +164,7 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              'Candidates (${election.candidates.length})',
+              l10n.candidatesCount(election.candidates.length),
               style: theme.textTheme.titleSmall,
             ),
           ],
@@ -164,7 +174,7 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              'No candidates registered.',
+              l10n.noCandidatesRegistered,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -184,7 +194,11 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
     );
   }
 
-  Widget _buildEcSection(ThemeData theme, Election election) {
+  Widget _buildEcSection(
+    ThemeData theme,
+    AppLocalizations l10n,
+    Election election,
+  ) {
     final truncated = election.ecPubkey.length > 16
         ? '${election.ecPubkey.substring(0, 8)}...${election.ecPubkey.substring(election.ecPubkey.length - 8)}'
         : election.ecPubkey;
@@ -203,7 +217,10 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(width: 8),
-                Text('Electoral Commission', style: theme.textTheme.titleSmall),
+                Text(
+                  l10n.electoralCommission,
+                  style: theme.textTheme.titleSmall,
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -219,13 +236,11 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.copy, size: 18),
-                  tooltip: 'Copy EC pubkey',
+                  tooltip: l10n.copyEcPubkey,
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: election.ecPubkey));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('EC pubkey copied to clipboard'),
-                      ),
+                      SnackBar(content: Text(l10n.ecPubkeyCopied)),
                     );
                   },
                 ),
@@ -237,17 +252,21 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
     );
   }
 
-  Widget _buildVoteButton(ThemeData theme, Election election) {
+  Widget _buildVoteButton(
+    ThemeData theme,
+    AppLocalizations l10n,
+    Election election,
+  ) {
     final status = election.status;
     final isActive = status == ElectionStatus.active;
 
     String? disabledReason;
     if (status == ElectionStatus.upcoming) {
-      disabledReason = 'Voting has not started yet';
+      disabledReason = l10n.votingNotStarted;
     } else if (status == ElectionStatus.finished) {
-      disabledReason = 'This election has ended';
+      disabledReason = l10n.electionEnded;
     } else if (status == ElectionStatus.canceled) {
-      disabledReason = 'This election was canceled';
+      disabledReason = l10n.electionCanceled;
     }
 
     return Column(
@@ -256,14 +275,13 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
         FilledButton.icon(
           onPressed: isActive && _selectedCandidateId != null
               ? () {
-                  // TODO: Implement voting flow (Issue #6).
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Voting flow coming soon.')),
+                    SnackBar(content: Text(l10n.votingFlowComingSoon)),
                   );
                 }
               : null,
           icon: const Icon(Icons.how_to_vote),
-          label: const Text('Vote'),
+          label: Text(l10n.vote),
         ),
         if (disabledReason != null) ...[
           const SizedBox(height: 8),
@@ -278,7 +296,7 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
         if (isActive && _selectedCandidateId == null) ...[
           const SizedBox(height: 8),
           Text(
-            'Select a candidate to vote',
+            l10n.selectCandidateToVote,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,

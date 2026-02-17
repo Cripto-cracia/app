@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'package:criptocracia_app/models/candidate.dart';
 import 'package:criptocracia_app/models/election_result.dart';
 import 'package:criptocracia_app/widgets/election_results_widget.dart';
@@ -12,6 +13,8 @@ void main() {
 
   Widget buildWidget(ElectionResult results) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: ElectionResultsWidget(results: results)),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:criptocracia_app/l10n/app_localizations.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ void main() {
     return ChangeNotifierProvider<SettingsService>.value(
       value: settingsService,
       child: const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Material(
           child: MediaQuery(
             data: MediaQueryData(size: Size(400, 1200)),
