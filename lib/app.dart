@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'config/theme.dart';
-import 'screens/home_screen.dart';
+import 'screens/elections_list_screen.dart';
 
 /// The root widget of the Cripto-cracia application.
 class CriptocraciaApp extends StatelessWidget {
@@ -14,7 +14,7 @@ class CriptocraciaApp extends StatelessWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
-      home: const HomeScreen(),
+      home: const ElectionsListScreen(),
     );
   }
 }
