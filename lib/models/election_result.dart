@@ -131,15 +131,25 @@ class ElectionResult {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ElectionResult &&
-          runtimeType == other.runtimeType &&
-          electionId == other.electionId &&
-          totalVotes == other.totalVotes;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ElectionResult || runtimeType != other.runtimeType) {
+      return false;
+    }
+    if (electionId != other.electionId ||
+        totalVotes != other.totalVotes ||
+        lastUpdated != other.lastUpdated ||
+        candidateResults.length != other.candidateResults.length) {
+      return false;
+    }
+    for (var i = 0; i < candidateResults.length; i++) {
+      if (candidateResults[i] != other.candidateResults[i]) return false;
+    }
+    return true;
+  }
 
   @override
-  int get hashCode => Object.hash(electionId, totalVotes);
+  int get hashCode => Object.hash(electionId, totalVotes, lastUpdated);
 
   @override
   String toString() =>

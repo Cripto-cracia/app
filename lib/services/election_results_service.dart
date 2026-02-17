@@ -109,6 +109,10 @@ class ElectionResultsService extends ChangeNotifier {
     _streamSubscriptions.remove(electionId);
     _nostrService.subscriptionManager.close(subName);
     _activeSubscriptions.remove(subName);
+    _tallies.remove(electionId);
+    _candidates.remove(electionId);
+    _lastUpdated.remove(electionId);
+    _processedEvents.remove(electionId);
 
     debugPrint(
       'ElectionResultsService: Stopped tracking results for $electionId',
