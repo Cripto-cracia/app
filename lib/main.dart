@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'app.dart';
 import 'services/election_service.dart';
 import 'services/nostr_service.dart';
+import 'services/settings_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +12,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<SettingsService>(
+          create: (_) => SettingsService()..load(),
+        ),
         ChangeNotifierProvider<NostrService>(create: (_) => NostrService()),
         ChangeNotifierProxyProvider<NostrService, ElectionService>(
           create: (context) =>
