@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/election.dart';
 import '../services/election_service.dart';
 import '../widgets/election_card.dart';
+import 'election_detail_screen.dart';
 
 /// Screen displaying discovered elections grouped by status.
 class ElectionsListScreen extends StatefulWidget {
@@ -80,13 +81,10 @@ class _ElectionsListScreenState extends State<ElectionsListScreen> {
                 return ElectionCard(
                   election: election,
                   onTap: () {
-                    // Placeholder: navigate to election detail (Issue #5).
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Election detail for "${election.name}" '
-                          'coming soon.',
-                        ),
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) =>
+                            ElectionDetailScreen(electionId: election.id),
                       ),
                     );
                   },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/election.dart';
+import 'status_badge.dart';
 
 /// A Material card displaying election summary information.
 class ElectionCard extends StatelessWidget {
@@ -36,7 +37,7 @@ class ElectionCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _StatusBadge(status: election.status),
+                  StatusBadge(status: election.status),
                 ],
               ),
               const SizedBox(height: 8),
@@ -86,38 +87,5 @@ class ElectionCard extends StatelessWidget {
     final hour = dt.hour.toString().padLeft(2, '0');
     final minute = dt.minute.toString().padLeft(2, '0');
     return '${dt.year}-$month-$day $hour:$minute';
-  }
-}
-
-/// A color-coded badge indicating election status.
-class _StatusBadge extends StatelessWidget {
-  final ElectionStatus status;
-
-  const _StatusBadge({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    final (label, color) = switch (status) {
-      ElectionStatus.active => ('Active', Colors.green),
-      ElectionStatus.upcoming => ('Upcoming', Colors.orange),
-      ElectionStatus.finished => ('Finished', Colors.grey),
-      ElectionStatus.canceled => ('Canceled', Colors.red),
-    };
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
   }
 }
