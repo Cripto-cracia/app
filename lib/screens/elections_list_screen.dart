@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../models/election.dart';
 import '../services/election_service.dart';
 import '../widgets/election_card.dart';
-import 'election_detail_screen.dart';
 
 /// Screen displaying discovered elections grouped by status.
 class ElectionsListScreen extends StatefulWidget {
@@ -53,6 +52,10 @@ class _ElectionsListScreenState extends State<ElectionsListScreen> {
                 value: ElectionStatus.finished,
                 child: Text('Finished'),
               ),
+              const PopupMenuItem(
+                value: ElectionStatus.canceled,
+                child: Text('Canceled'),
+              ),
             ],
           ),
         ],
@@ -81,10 +84,13 @@ class _ElectionsListScreenState extends State<ElectionsListScreen> {
                 return ElectionCard(
                   election: election,
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) =>
-                            ElectionDetailScreen(electionId: election.id),
+                    // Placeholder: navigate to election detail (Issue #5).
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Election detail for "${election.name}" '
+                          'coming soon.',
+                        ),
                       ),
                     );
                   },
@@ -126,7 +132,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Pull to refresh or check your relay connections.',
+            'Tap refresh or check your relay connections.',
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),

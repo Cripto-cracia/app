@@ -106,6 +106,12 @@ class Election {
         createdAt: event.createdAt,
       );
     } catch (e) {
+      // Log the actual error for debugging malformed events.
+      assert(() {
+        // ignore: avoid_print
+        print('Election.fromEvent failed for event ${event.id}: $e');
+        return true;
+      }());
       return null;
     }
   }
@@ -129,9 +135,11 @@ class Election {
     return Election(
       id: map['id'] as String,
       name: map['name'] as String,
-      candidates: (map['candidates'] as List)
-          .map((c) => Candidate.fromMap(c as Map<String, dynamic>))
-          .toList(),
+      candidates:
+          (map['candidates'] as List?)
+              ?.map((c) => Candidate.fromMap(c as Map<String, dynamic>))
+              .toList() ??
+          [],
       startTime: DateTime.fromMillisecondsSinceEpoch(
         (map['start_time'] as int) * 1000,
       ),
