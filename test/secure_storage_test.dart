@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:criptocracia_app/services/secure_storage.dart';
 
@@ -10,6 +11,7 @@ void main() {
     late Directory tempDir;
 
     setUp(() async {
+      SharedPreferences.setMockInitialValues({});
       tempDir = await Directory.systemTemp.createTemp('hive_test_');
     });
 

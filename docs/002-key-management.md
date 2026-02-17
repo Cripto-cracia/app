@@ -8,7 +8,7 @@ reproduce the same key pair on any device.
 
 ## Derivation Chain
 
-```
+```text
 BIP39 Mnemonic (12/24 words)
         │
         ▼

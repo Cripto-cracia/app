@@ -1,19 +1,21 @@
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Provides encrypted local storage for sensitive data such as mnemonics.
 ///
-/// Uses Hive with AES-256 encryption. The encryption key is derived from
-/// a static salt (to be enhanced with device-specific keys in Phase 5).
+/// Uses Hive with AES-256 encryption. The encryption key is randomly generated
+/// on first launch and persisted via SharedPreferences. Phase 5 will enhance
+/// this with device-fingerprint-backed PBKDF2 key derivation.
 class SecureStorage {
   SecureStorage._();
 
   static const String _boxName = 'criptocracia_secure';
   static const String _mnemonicKey = 'nostr_mnemonic';
-  static const String _keySalt = 'criptocracia_secure_v1';
+  static const String _encKeyPref = 'criptocracia_enc_key';
 
   static Box<String>? _box;
 
@@ -31,7 +33,7 @@ class SecureStorage {
     } else {
       await Hive.initFlutter();
     }
-    final key = _deriveEncryptionKey();
+    final key = await _getOrCreateEncryptionKey();
     _box = await Hive.openBox<String>(
       _boxName,
       encryptionCipher: HiveAesCipher(key),
@@ -111,13 +113,23 @@ class SecureStorage {
     }
   }
 
-  /// Derives a 256-bit encryption key from the static salt.
+  /// Returns the encryption key, generating a random one on first launch.
   ///
-  /// Phase 5 will replace this with device-fingerprint-backed key derivation
-  /// similar to the reference implementation's PBKDF2 + device ID approach.
-  static Uint8List _deriveEncryptionKey() {
-    final bytes = utf8.encode(_keySalt);
-    final hash = sha256.convert(bytes);
-    return Uint8List.fromList(hash.bytes);
+  /// The key is stored in SharedPreferences. Phase 5 will replace this with
+  /// device-fingerprint-backed PBKDF2 key derivation similar to the reference
+  /// implementation's approach.
+  static Future<Uint8List> _getOrCreateEncryptionKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    final existing = prefs.getString(_encKeyPref);
+    if (existing != null) {
+      return Uint8List.fromList(base64Decode(existing));
+    }
+    // Generate a cryptographically random 256-bit key.
+    final random = Random.secure();
+    final key = Uint8List.fromList(
+      List<int>.generate(32, (_) => random.nextInt(256)),
+    );
+    await prefs.setString(_encKeyPref, base64Encode(key));
+    return key;
   }
 }
