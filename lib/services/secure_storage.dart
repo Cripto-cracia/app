@@ -85,7 +85,7 @@ class SecureStorage {
     await _migrateLegacyEncryptionKey();
 
     // Migrate legacy data from unified box to namespace-specific boxes
-    await _migrateLegacyData(path: path);
+    await _migrateLegacyData();
 
     final keysEncKey = await _getOrCreateEncryptionKey(_keysEncKeyTag);
     final settingsEncKey = await _getOrCreateEncryptionKey(_settingsEncKeyTag);
@@ -238,7 +238,7 @@ class SecureStorage {
   ///
   /// Sensitive keys (mnemonic, blind tokens) go to the keys box; everything
   /// else goes to the settings box.
-  static Future<void> _migrateLegacyData({String? path}) async {
+  static Future<void> _migrateLegacyData() async {
     // Only migrate if the legacy box exists on disk
     if (!await _legacyBoxExists()) return;
 

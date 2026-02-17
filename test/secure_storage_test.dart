@@ -149,6 +149,20 @@ void main() {
         // Legacy key should be removed from SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         expect(prefs.getString('criptocracia_enc_key'), isNull);
+
+        // Verify the migrated key is usable via a round-trip
+        await SecureStorage.write(
+          key: 'migration_check',
+          value: 'ok',
+          namespace: StorageNamespace.keys,
+        );
+        expect(
+          await SecureStorage.read(
+            key: 'migration_check',
+            namespace: StorageNamespace.keys,
+          ),
+          'ok',
+        );
       });
     });
   });

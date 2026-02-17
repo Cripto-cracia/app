@@ -101,9 +101,10 @@ Both steps are idempotent and safe to run multiple times.
 
 ## Testing
 
-Tests inject a `FakeFlutterSecureStorage` that stores keys in memory,
-allowing the full init → write → read → close → reinit cycle to be
-tested without platform channels. Key tests:
+Tests use `FlutterSecureStorage.setMockInitialValues({})` to mock
+the secure enclave in memory, allowing the full
+init → write → read → close → reinit cycle to be tested without
+platform channels. Key tests:
 
 - Namespace isolation (keys vs settings)
 - Encryption keys stored in secure enclave (not SharedPreferences)
