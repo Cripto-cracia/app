@@ -12,12 +12,14 @@ class _SubscriptionInfo {
   final List<NostrFilter> filters;
   final void Function(NostrEventModel)? onEvent;
   NostrEventsStream? stream;
+  StreamController<NostrEventModel>? controller;
 
   _SubscriptionInfo({
     required this.name,
     required this.filters,
     this.onEvent,
     this.stream,
+    this.controller,
   });
 }
 
@@ -79,6 +81,7 @@ class SubscriptionManager {
       filters: filters,
       onEvent: onEvent,
       stream: eventsStream,
+      controller: controller,
     );
 
     _subscriptions[name] = info;
@@ -121,6 +124,7 @@ class SubscriptionManager {
     final info = _subscriptions.remove(name);
     if (info != null) {
       info.stream?.close();
+      info.controller?.close();
       debugPrint('SubscriptionManager: Closed subscription "$name"');
     }
   }

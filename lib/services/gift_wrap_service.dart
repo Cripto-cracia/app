@@ -49,7 +49,10 @@ class GiftWrapService extends ChangeNotifier {
       onEvent: (event) => _handleIncomingWrap(event, myPrivateKey),
     );
 
-    debugPrint('GiftWrapService: Listening for gift wraps to $myPubkey');
+    debugPrint(
+      'GiftWrapService: Listening for gift wraps to '
+      '${myPubkey.substring(0, 8)}...',
+    );
   }
 
   /// Stops listening for incoming gift-wrapped messages.

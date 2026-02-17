@@ -93,7 +93,11 @@ class NostrEventModel {
   int get hashCode => id.hashCode;
 
   @override
-  String toString() =>
-      'NostrEventModel(id: ${id.substring(0, 8)}..., kind: $kind, '
-      'pubkey: ${pubkey.substring(0, 8)}...)';
+  String toString() {
+    final shortId = id.length >= 8 ? '${id.substring(0, 8)}...' : id;
+    final shortPk = pubkey.length >= 8
+        ? '${pubkey.substring(0, 8)}...'
+        : pubkey;
+    return 'NostrEventModel(id: $shortId, kind: $kind, pubkey: $shortPk)';
+  }
 }

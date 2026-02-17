@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' show pow;
 
 import 'package:dart_nostr/dart_nostr.dart';
 import 'package:flutter/foundation.dart';
@@ -170,6 +171,12 @@ class NostrService extends ChangeNotifier {
       notifyListeners();
     }
     debugPrint('NostrService: Disconnected from $relayUrl');
+
+    // Check if all relays are disconnected (same as error handler).
+    if (_relays.every((r) => r.status == RelayConnectionStatus.disconnected)) {
+      _setConnectionState(NostrConnectionState.disconnected);
+      _scheduleReconnect();
+    }
   }
 
   /// Schedules a reconnection attempt with exponential backoff.
@@ -185,19 +192,27 @@ class NostrService extends ChangeNotifier {
     _setConnectionState(NostrConnectionState.reconnecting);
 
     _reconnectTimer = Timer(Duration(seconds: delay), () async {
-      _reconnectAttempts++;
-      await _connect();
+      try {
+        _reconnectAttempts++;
+        await _connect();
 
-      // Re-subscribe after successful reconnection.
-      if (_connectionState == NostrConnectionState.connected) {
-        _subscriptionManager.resubscribeAll();
+        // Re-subscribe after successful reconnection.
+        if (_connectionState == NostrConnectionState.connected) {
+          _subscriptionManager.resubscribeAll();
+        }
+      } catch (e) {
+        debugPrint('NostrService: Reconnect attempt failed: $e');
+        _scheduleReconnect();
       }
     });
   }
 
   /// Calculates exponential backoff delay.
+  ///
+  /// Uses `pow` instead of bitwise shift to avoid 32-bit overflow on web.
   int _calculateBackoff() {
-    final delay = _baseReconnectDelay * (1 << _reconnectAttempts);
+    final exponent = _reconnectAttempts.clamp(0, 20);
+    final delay = _baseReconnectDelay * pow(2, exponent).toInt();
     return delay.clamp(0, _maxReconnectDelay);
   }
 
@@ -305,12 +320,24 @@ class NostrService extends ChangeNotifier {
   }
 
   /// Converts a [NostrEvent] to a [NostrEventModel].
+  ///
+  /// Throws [ArgumentError] if the event is missing critical fields
+  /// (id, createdAt, kind) rather than silently masking the issue.
   static NostrEventModel toEventModel(NostrEvent event) {
+    if (event.id == null) {
+      throw ArgumentError('Cannot convert event without an id');
+    }
+    if (event.createdAt == null) {
+      throw ArgumentError('Cannot convert event without createdAt');
+    }
+    if (event.kind == null) {
+      throw ArgumentError('Cannot convert event without kind');
+    }
     return NostrEventModel(
-      id: event.id ?? '',
+      id: event.id!,
       pubkey: event.pubkey,
-      createdAt: event.createdAt ?? DateTime.now(),
-      kind: event.kind ?? 0,
+      createdAt: event.createdAt!,
+      kind: event.kind!,
       content: event.content ?? '',
       tags: event.tags ?? [],
       sig: event.sig ?? '',
@@ -347,9 +374,11 @@ class NostrService extends ChangeNotifier {
   @override
   void dispose() {
     _reconnectTimer?.cancel();
-    _connectionStateController.close();
-    _subscriptionManager.dispose();
+    // Disconnect first (uses _subscriptionManager and _connectionStateController).
     disconnect();
+    // Then close resources.
+    _subscriptionManager.dispose();
+    _connectionStateController.close();
     super.dispose();
   }
 }
