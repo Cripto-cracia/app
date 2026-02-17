@@ -34,6 +34,11 @@ class _ElectionsListScreenState extends State<ElectionsListScreen> {
       appBar: AppBar(
         title: const Text('Elections'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () => Navigator.pushNamed(context, '/settings'),
+          ),
           PopupMenuButton<ElectionStatus?>(
             icon: const Icon(Icons.filter_list),
             tooltip: 'Filter by status',
